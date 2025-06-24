@@ -1,4 +1,4 @@
-package com.tw.heathify_me.dto;
+package com.tw.nutrisense.dto;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.tw.heathify_me.repository;
+package com.tw.nutrisense.repository;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
