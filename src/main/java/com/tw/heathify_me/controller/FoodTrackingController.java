@@ -1,7 +1,7 @@
 package com.tw.heathify_me.controller;
 
 import com.tw.heathify_me.dto.FoodTrackingDTO;
-import com.tw.heathify_me.repository.FoodTrackingDocument;
+import com.tw.heathify_me.repository.FoodTracking.FoodTrackingDocument;
 import com.tw.heathify_me.service.FoodTrackingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

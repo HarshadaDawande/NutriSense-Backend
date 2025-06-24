@@ -1,4 +1,4 @@
-package com.tw.heathify_me.repository;
+package com.tw.heathify_me.repository.FoodTracking;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
