@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping()
-    @ResponseStatus(code = HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserDTO createUserDTO) {
         logger.info("Attempting to create user with name: " + createUserDTO.getUserName());
         userService.create(createUserDTO);
