@@ -14,4 +14,7 @@ public class CreateUserDTO {
     @NotBlank(message = "Email address is required")
     @Email(message = "Email address is invalid")
     private String emailAddress;
+
+    @NotBlank(message = "User ID is required")
+    private String userId;
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.hibernate.validator.constraints.UUID;
 import org.springframework.data.annotation.CreatedDate;
 
 @Data
@@ -19,4 +20,6 @@ public class UserDocument {
 
     @CreatedDate
     private Instant createdAt;
+    @UUID
+    private String userId;
 }

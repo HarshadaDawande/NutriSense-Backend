@@ -13,4 +13,6 @@ public class FoodTrackingDTO {
     private String fats;
     private String calories;
     private String mealDate;
+    private String userId;
+    private String mealId;
 }

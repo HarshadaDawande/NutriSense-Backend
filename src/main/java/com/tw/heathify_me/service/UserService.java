@@ -28,6 +28,7 @@ public class UserService {
         var userDocument = UserDocument.builder()
                 .userName(createUserDTO.getUserName())
                 .emailAddress(createUserDTO.getEmailAddress())
+                .userId(createUserDTO.getUserId())
                 .build();
         logger.info("User created with name " + userDocument.getUserName());
         userRepository.save(userDocument);
