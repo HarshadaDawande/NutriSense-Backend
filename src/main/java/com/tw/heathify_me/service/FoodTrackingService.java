@@ -5,9 +5,9 @@ import com.tw.heathify_me.repository.FoodTracking.FoodTrackingRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class FoodTrackingService {
     private static final Logger logger = LoggerFactory.getLogger(FoodTrackingService.class);
     final FoodTrackingRepository foodTrackingRepository;

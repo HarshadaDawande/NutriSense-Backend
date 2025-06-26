@@ -2,15 +2,15 @@ package com.tw.heathify_me.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import com.tw.heathify_me.dto.CreateUserDTO;
 import com.tw.heathify_me.repository.User.UserDocument;
 import com.tw.heathify_me.repository.User.UserRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
-@Component
+@Service
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     final UserRepository userRepository;
@@ -29,6 +29,7 @@ public class UserService {
                 .userName(createUserDTO.getUserName())
                 .emailAddress(createUserDTO.getEmailAddress())
                 .isFirstTimeUser(createUserDTO.getIsFirstTimeUser())
+                .hasSetTargets(createUserDTO.getHasSetTargets())
                 .build();
         logger.info("User created with name " + userDocument.getUserName());
         userRepository.save(userDocument);
@@ -36,5 +37,14 @@ public class UserService {
 
     public UserDocument getUser(String emailAddress) {
         return userRepository.findByEmailAddress(emailAddress).orElse(null);
+    }
+
+    public void updateHasSetTargets(String emailAddress, String hasSetTargets) {
+        userRepository.findByEmailAddress(emailAddress)
+            .ifPresent(user -> {
+                logger.info("Id for user ", user.getId());
+                user.setHasSetTargets(hasSetTargets);
+                userRepository.save(user);
+            });
     }
 }
