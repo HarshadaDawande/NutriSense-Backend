@@ -30,6 +30,7 @@ public class UserService {
                 .emailAddress(createUserDTO.getEmailAddress())
                 .isFirstTimeUser(createUserDTO.getIsFirstTimeUser())
                 .hasSetTargets(createUserDTO.getHasSetTargets())
+                .userId(createUserDTO.getUserId())
                 .build();
         logger.info("User created with name " + userDocument.getUserName());
         userRepository.save(userDocument);

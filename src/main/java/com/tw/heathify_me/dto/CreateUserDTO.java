@@ -16,4 +16,7 @@ public class CreateUserDTO {
     private String emailAddress;
     private String isFirstTimeUser = "true";
     private String hasSetTargets = "false";
+
+    @NotBlank(message = "User ID is required")
+    private String userId;
 }

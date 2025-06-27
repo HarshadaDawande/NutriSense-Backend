@@ -4,6 +4,7 @@ import com.tw.heathify_me.dto.FoodTrackingDTO;
 import com.tw.heathify_me.dto.TargetsDTO;
 import com.tw.heathify_me.repository.FoodTracking.FoodTrackingDocument;
 import com.tw.heathify_me.repository.Targets.TargetsDocument;
+import com.tw.heathify_me.repository.User.UserDocument;
 import com.tw.heathify_me.service.FoodTrackingService;
 import com.tw.heathify_me.service.TargetsService;
 import com.tw.heathify_me.service.UserService;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(value = "/v1/meal")
@@ -49,7 +51,7 @@ public class FoodTrackingController {
 
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ResponseEntity<String> saveFood(@RequestBody FoodTrackingDTO foodTrackingDTO) {
+    public ResponseEntity<String> logMeal(@RequestBody FoodTrackingDTO foodTrackingDTO) {
         FoodTrackingDocument foodTrackingDocument = FoodTrackingDocument.builder()
                 .mealType(foodTrackingDTO.getMealType())
                 .mealDescription(foodTrackingDTO.getMealDescription())
@@ -58,9 +60,32 @@ public class FoodTrackingController {
                 .fats(foodTrackingDTO.getFats())
                 .calories(foodTrackingDTO.getCalories())
                 .mealDate(foodTrackingDTO.getMealDate())
+                .userId(foodTrackingDTO.getUserId())
+                .mealId(foodTrackingDTO.getMealId())
                 .build();
         foodTrackingService.save(foodTrackingDocument);
 
-        return ResponseEntity.ok().body("Food tracking data saved successfully!");
+        return ResponseEntity.ok().body("Meal logged successfully!");
+    }
+
+    @GetMapping("/{userId}/meals")
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<Object> getMealsForTheUser(@PathVariable String userId) {
+        var mealsDocument = foodTrackingService.getMealsForTheUser(userId);
+        if (mealsDocument == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Meals not logged");
+        }
+        return ResponseEntity.ok(mealsDocument);
+    }
+
+    @DeleteMapping("/{mealId}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<Object> deleteMeal(@PathVariable String mealId) {
+        var mealsDocument = foodTrackingService.findByMealId(mealId);
+        if (mealsDocument == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Meal not found");
+        }
+        foodTrackingService.deleteMeal(mealId);
+        return ResponseEntity.ok(mealsDocument);
     }
 }

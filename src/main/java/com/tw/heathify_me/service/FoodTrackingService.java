@@ -20,4 +20,16 @@ public class FoodTrackingService {
         logger.info("Saved meal details for " + foodTrackingDocument.getMealType());
         foodTrackingRepository.save(foodTrackingDocument);
     }
+
+    public Object getMealsForTheUser(String userId) {
+        return foodTrackingRepository.findByUserId(userId).orElse(null);
+    };
+
+    public void deleteMeal(String mealId) {
+        foodTrackingRepository.deleteByMealId(mealId);
+    }
+
+    public Object findByMealId(String mealId) {
+        return foodTrackingRepository.findByMealId(mealId).orElse(null);
+    }
 }
