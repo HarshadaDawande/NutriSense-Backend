@@ -1,12 +1,13 @@
 package com.tw.heathify_me.controller;
 
 import com.tw.heathify_me.dto.FoodTrackingDTO;
+import com.tw.heathify_me.dto.TargetsDTO;
 import com.tw.heathify_me.repository.FoodTracking.FoodTrackingDocument;
+import com.tw.heathify_me.repository.Targets.TargetsDocument;
 import com.tw.heathify_me.repository.User.UserDocument;
 import com.tw.heathify_me.service.FoodTrackingService;
-
-import jakarta.validation.Valid;
-
+import com.tw.heathify_me.service.TargetsService;
+import com.tw.heathify_me.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,26 +16,42 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping(value = "/v1")
+@RequestMapping(value = "/v1/meal")
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class FoodTrackingController {
     private static final Logger logger = LoggerFactory.getLogger(FoodTrackingController.class);
 
     final FoodTrackingService foodTrackingService;
+    final TargetsService targetsService;
+    final UserService userService;
 
-    public FoodTrackingController(FoodTrackingService foodTrackingService) {
+    public FoodTrackingController(FoodTrackingService foodTrackingService, TargetsService targetsService, UserService userService) {
         this.foodTrackingService = foodTrackingService;
+        this.targetsService = targetsService;
+        this.userService = userService;
     }
+    @PostMapping("/targets")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public ResponseEntity<String> saveTargets(@RequestBody TargetsDTO targetsDTO) {
+        logger.info("Attempting to set daily targets: " + targetsDTO.getEmailAddress());
+        TargetsDocument targetsDocument = TargetsDocument.builder()
+                .userName(targetsDTO.getUserName())
+                .createdAt(targetsDTO.getCreatedAt())
+                .protein(targetsDTO.getProtein())
+                .carbs(targetsDTO.getCarbs())
+                .fats(targetsDTO.getFats())
+                .calories(targetsDTO.getCalories())
+                .build();
+        targetsService.saveTargets(targetsDocument);
 
-    @GetMapping(value = "/greeting")
-    public String greeting() {
-        return "Hello Harshada !";
+        userService.updateHasSetTargets(targetsDTO.getEmailAddress(), "true");
+
+        return ResponseEntity.ok("Targets saved successfully");
     }
 
     @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
     public ResponseEntity<String> logMeal(@RequestBody FoodTrackingDTO foodTrackingDTO) {
-        logger.info("Food DTO : " + foodTrackingDTO);
         FoodTrackingDocument foodTrackingDocument = FoodTrackingDocument.builder()
                 .mealType(foodTrackingDTO.getMealType())
                 .mealDescription(foodTrackingDTO.getMealDescription())
@@ -61,7 +78,7 @@ public class FoodTrackingController {
         return ResponseEntity.ok(mealsDocument);
     }
 
-    @DeleteMapping("/meals/{mealId}")
+    @DeleteMapping("/{mealId}")
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<Object> deleteMeal(@PathVariable String mealId) {
         var mealsDocument = foodTrackingService.findByMealId(mealId);
