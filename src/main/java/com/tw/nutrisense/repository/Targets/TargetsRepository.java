@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TargetsRepository extends MongoRepository<TargetsDocument, ObjectId> {
+    TargetsDocument findTopByUserNameOrderByCreatedAtDesc(String userName);
 }

@@ -77,6 +77,16 @@ public class FoodTrackingController {
         return ResponseEntity.ok(mealsDocument);
     }
 
+    @GetMapping("/{userId}/targets")
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<Object> getTargetsForUser(@PathVariable String userId) {
+        var targetsDocument = targetsService.getLatestTargets(userId);
+        if (targetsDocument == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Targets not found");
+        }
+        return ResponseEntity.ok(targetsDocument);
+    }
+
     @DeleteMapping("/{mealId}")
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<Object> deleteMeal(@PathVariable String mealId) {

@@ -17,4 +17,8 @@ public class TargetsService {
     public void saveTargets(TargetsDocument targetsDocument) {
         targetsRepository.save(targetsDocument);
     }
+
+    public TargetsDocument getLatestTargets(String userName) {
+        return targetsRepository.findTopByUserNameOrderByCreatedAtDesc(userName);
+    }
 }
